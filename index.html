@@ -10,7 +10,6 @@
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
-
   <link rel="stylesheet" href="./assets/css/style.css" />
   <title>Task Board</title>
 </head>
@@ -20,16 +19,51 @@
     <h1 class="display-3">Task Board</h1>
     <p class="lead">A simple Kanban board for task management</p>
   </header>
-  <div class="container">
-    <div class="text-center mb-5">
-      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
+      <!-- Todo: Create a modal with a form to add tasks -->
+       <!-- Button trigger modal -->
+       <div class="text-center mb-5">
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add task
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="taskForm">
+        <div class="modal-header">
+          <h1 class="modal-title" id="exampleModalLabel">Add your task</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="topLabel row">
+            <label for="taskTitle" class="col">Task title</label>
+            <label for="dueDate" class="col"> Date due</label>
+          </div>
+          <div class="topInput row">
+            <input type="text" class="col" id="taskTitle" name="taskTitle"><br>
+            <input type="date" class="col" id="dateDue" name="dateDue"><br>
+          </div>
+          <div class="contentLabel row">
+            <label for="taskDetails" class="col">Task details</label>
+          </div>
+          <div class="contentInput row">
+            <input type="content" class="col" id="taskDetails" name="taskDetails">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Never mind</button>
+          <button type="submit" id="tskBtn" class="btn btn-primary">Add to the board!</button>
+        </div>
+      </form>
+      </div>
     </div>
-    <!-- Todo: Create a modal with a form to add tasks -->
+  </div>
     <div class="row swim-lanes text-center justify-content-between">
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
           <div class="card-header bg-white">
-            <h2 class="card-title mb-1">To Do</h2>
+            <h2 class="card-title mb-1">Not yet started</h2>
           </div>
           <div class="card-body bg-light">
             <div id="todo-cards"></div>
@@ -49,7 +83,7 @@
         <div class="col-12 col-lg-4 d-flex">
           <div id="done" class="card border-light mb-3 lane flex-grow-1">
             <div class="card-header bg-white">
-              <h2 class="card-title mb-1">Done</h2>
+              <h2 class="card-title mb-1">Completed</h2>
             </div>
             <div class="card-body bg-light">
               <div id="done-cards"></div>
@@ -66,7 +100,6 @@
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
     integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U=" crossorigin="anonymous"></script>
-
   <script src="./assets/js/script.js"></script>
 </body>
 

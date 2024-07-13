@@ -14,3 +14,6 @@ body {
 .task-card:hover {
   cursor: grab;
 }
+
+
+/*will need a class for changing the color of the date portion based on dates due. 
