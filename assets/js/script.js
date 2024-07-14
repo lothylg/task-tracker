@@ -1,6 +1,6 @@
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
-let nextId = JSON.parse(localStorage.getItem("nextId"));
+// let taskList = JSON.parse(localStorage.getItem("tasks"));
+// let nextId = JSON.parse(localStorage.getItem("nextId"));
 const titleInput = document.getElementById("taskTitle");
 const dateInput = document.getElementById("dateDue");
 const contentInput = document.getElementById("taskDetails");
@@ -12,8 +12,10 @@ const addBtn = document.querySelector("#tskBtn");
 const toDoSwim = document.getElementById("to-do");
 const inProgressSwim = document.getElementById("in-progress");
 const doneSwim = document.getElementById("done");
+const cardEl = $('.card');
+ 
 
-
+card.on('click', '.delete-item-btn', handleDeleteTask);
 
 $(function() {
     $('#tskBtn').on('click', function(e) {
@@ -24,7 +26,7 @@ $(function() {
 
 
 // Todo: create a function to generate a unique task id
-function generateTaskId() {
+const randId = function generateTaskId() {
     let randId = "";
     let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for( var i=0; i < 10; i++ ){
@@ -33,8 +35,16 @@ function generateTaskId() {
     return randId;
 }
 
+/*// Todo: create a function to handle adding a new task
+function handleAddTask(event){
+
+}*/
 function parseForm(){
     const randId = generateTaskId()
+    const existingTasksString = localStorage.getItem(existingTasks)
+    if (existingTasks) {
+        const existingtasks = JSON.parse(existingTasksString)
+    }
     const taskObj = {
         taskTitle: titleInput.value,
         dueDate: dateInput.value,
@@ -58,16 +68,20 @@ function createTaskCard(taskObj) {
     const deleteBtn = document.createElement("button");
 
     cardBlock.classList.add = ('card draggable future ui-draggable-handle ui-draggable ');
-    cardBlock.setAttribute = ('id', taskObj.randId);
-    h2Tag.textContent = titleInput.value;
-    h2Tag.classList.add =('card-header');
-    dueDate.textContent = dateInput.value;
-    dueDate.classList.add = ('card-date')
-    contentTag.textContent = contentInput.value;
-    contentTag.classList.add = ('card-content');
-    deleteBtn.classList.add = ('btn btn-danger btn-small delete-item-btn');
-    deleteBtn.textContent = "Remove";
     
+    
+    h2Tag.classList.add =('card-header');
+    h2Tag.textContent = titleInput.value;
+   
+    dueDate.classList.add = ('card-date')
+    dueDate.textContent = dateInput.value;
+    
+    contentTag.classList.add = ('card-content');
+    contentTag.textContent = contentInput.value;
+   
+    deleteBtn.classList.add = ('btn btn-danger btn-small delete-item-btn');
+    deleteBtn.setAttribute = ('taskId', taskObj.randId);
+    deleteBtn.textContent = "Remove";
 
     cardBlock.appendChild(h2Tag);
     cardBlock.appendChild(dueDate);
@@ -83,8 +97,6 @@ function createTaskCard(taskObj) {
     }
     
 }
-
-//card project-card draggable my-3 ui-draggable ui-draggable-handle
 
 
 /* Todo: create a function to render the task list 
@@ -102,10 +114,6 @@ function renderTaskList() {
         zIndex: 100,
         // ? This is the function that creates the clone of the card that is dragged. This is purely visual and does not affect the data.
         helper: function (e) {
-          // ? Check if the target of the drag event is the card itself or a child element. If it is the card itself, clone it, otherwise find the parent card  that is draggable and clone that.
-          const original = $(e.target).hasClass('ui-draggable')
-            ? $(e.target)
-            : $(e.target).closest('.ui-draggable');
           // ? Return the clone with the width set to the width of the original card. This is so the clone does not take up the entire width of the lane. This is to also fix a visual bug where the card shrinks as it's dragged to the right.
           return original.clone().css({
             width: original.outerWidth(),
@@ -114,31 +122,33 @@ function renderTaskList() {
       });
     }
 
-// Todo: create a function to handle adding a new task
-function handleAddTask(event){
-            if( existingTasks ){
-                tasksObj = JSON.parse(existingTasks);
-                createTaskCard();
-            } 
-}
+
 
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
-    const btnClicked = $(event.target);
+    const taskId = $(event).attr('taskId');
+    const btnClicked = $(event);
+    JSON.parse(localStorage.getItem(existingTasks));
+    existingTasks.splice(existingTasks.indexOf(taskId),1);
     btnClicked.parent('div').remove();
+    localStorage.setItem("existingTasks", JSON.stringify(existingTasks));
+    renderTaskList();
+
 }
-// cardBlock.on('click', '.delete-item-btn', handleDeleteTask);
+
 // Todo: create a function to handle dropping a task into a new status lane (draggable)
 function handleDrop(event, ui) {
-    const currentCardState = localStorage.getItem('tasks');
-    const taskId = ui.draggable[0].dataset.randId;
+    const existingTasks = JSON.parse(localStorage.getItem('existingTasks'));
+    const taskId = ui.draggable[0].dataset.uniqueID;
     const newStatus = event.target.id;
 
-    for (let )
+    for (let task of existingTasks){
+        if ( task.uniqueID === taskId) {
+            task.status = newStatus;
+        }
+    }
 
-        localStorage.setItem('projects', JSON.stringify(projects));
-        printProjectData();
 }
 
 /* Todo: when the page loads, render the task list, 
