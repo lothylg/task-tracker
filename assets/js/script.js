@@ -8,25 +8,34 @@ const toDoContainer = document.getElementById("todo-cards");
 const inProgressContainer = document.getElementById("in-progress-cards");
 const doneContainer = document.getElementById("done-cards");
 let existingTasks = JSON.parse( localStorage.getItem('existingTasks')) || [];
-const addBtn = document.querySelector("#tskBtn");
+const addBtn = document.getElementById("tskBtn");
 const toDoSwim = document.getElementById("to-do");
 const inProgressSwim = document.getElementById("in-progress");
 const doneSwim = document.getElementById("done");
 const cardEl = $('.card');
+
+start();
+// generateTaskId();
+
+function start(){
+    if ( existingTasks ) {
+        renderTaskList();
+    }
+}
  
-
-card.on('click', '.delete-item-btn', handleDeleteTask);
-
-$(function() {
-    $('#tskBtn').on('click', function(e) {
-        e.preventDefault();
-        parseForm();
-    });
+addBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    generateTaskId();
+    parseForm();
 });
 
 
+
+
+
+
 // Todo: create a function to generate a unique task id
-const randId = function generateTaskId() {
+function generateTaskId() {
     let randId = "";
     let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for( var i=0; i < 10; i++ ){
@@ -35,27 +44,34 @@ const randId = function generateTaskId() {
     return randId;
 }
 
+// $(function() {
+//     $('#tskBtn').on('click', function(e) {
+//         e.preventDefault();
+//         parseForm(e);
+//     });
+// });
+
 /*// Todo: create a function to handle adding a new task
 function handleAddTask(event){
 
 }*/
 function parseForm(){
-    const randId = generateTaskId()
-    const existingTasksString = localStorage.getItem(existingTasks)
-    if (existingTasks) {
+    let taskId = generateTaskId();
+    const existingTasksString = localStorage.getItem('existingTasks');
+    if (existingTasksString) {
         const existingtasks = JSON.parse(existingTasksString)
     }
     const taskObj = {
         taskTitle: titleInput.value,
         dueDate: dateInput.value,
         taskContent: contentInput.value,
-        uniqueID: randId,
+        uniqueID: taskId,
         status: 'notYetStarted'
     }
     console.log(taskObj);
     existingTasks.push(taskObj);
     localStorage.setItem("existingTasks", JSON.stringify(existingTasks));
-    renderTaskList()
+    renderTaskList();
 }
 
 /* Todo: create a function to create a task card
@@ -97,6 +113,9 @@ function createTaskCard(taskObj) {
     }
     
 }
+
+
+
 
 
 /* Todo: create a function to render the task list 
@@ -151,24 +170,26 @@ function handleDrop(event, ui) {
 
 }
 
+
+
 /* Todo: when the page loads, render the task list, 
 add event listeners, make lanes droppable, and make 
 the due date field a date picker*/
-$(document).ready(function () {
-    // ? Print project data to the screen on page load if there is any
-    printProjectData();
+// $(document).ready(function () {
+//     // ? Print project data to the screen on page load if there is any
+//     printProjectData();
   
-    $('#taskDueDate').datepicker({
-      changeMonth: true,
-      changeYear: true,
-    });
+//     $('#taskDueDate').datepicker({
+//       changeMonth: true,
+//       changeYear: true,
+//     });
   
-    // ? Make lanes droppable
-    $('.lane').droppable({
-      accept: '.draggable',
-      drop: handleDrop,
-    });
-  });
+//     // ? Make lanes droppable
+//     $('.lane').droppable({
+//       accept: '.draggable',
+//       drop: handleDrop,
+//     });
+//   });
 
 /* dayjs to create the logic to change the class 
 for the date part 
