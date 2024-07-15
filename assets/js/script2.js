@@ -6,6 +6,7 @@ const toDoContainer = $('#to-do');
 const inProgressContainer = $('#in-progress');
 const doneContainer = $('#done');
 const taskFormEl = $('#taskForm');
+const cardBodyEl = $('#to-do-cards')
 let existingTasks = JSON.parse(localStorage.getItem('existingTasks')) || [];
 
 
@@ -36,7 +37,7 @@ function createTaskCard(task) {
   const cardDescription = $('<p>').addClass('card-text').text(task.details);
   const cardDueDate = $('<p>').addClass('card-text').text(task.dueDate);
   const cardDeleteBtn = $('<button>')
-    .addClass('btn btn-danger bg-info delete')
+    .addClass('btn bg-info btn-delete-project delete')
     .text('Delete')
     .attr('data-task-id', task.id);
   cardDeleteBtn.on('click', handleDeleteTask);
@@ -122,8 +123,9 @@ function handleDeleteTask() {
     }
   });
 
+  localStorage.setItem('existingTasks', JSON.stringify(tasks));
+
   // ? We will use our helper function to save the tasks to localStorage
-  saveTasksToStorage(tasks);
 
   // ? Here we use our other function to print task back to the screen
   printTaskData();
@@ -140,7 +142,7 @@ function handleTaskFormSubmit(event) {
 
   const newTask = {
     // ? Here we use a Web API called `crypto` to generate a random id for our project. This is a unique identifier that we can use to find the project in the array. `crypto` is a built-in module that we can use in the browser and Nodejs.    id: crypto.randomUUID(),
-    uniqueId: crypto.randomUUID(), // random number generator
+    id: crypto.randomUUID(), // random number generator
     name: title,
     dueDate: taskDueDateDate,
     details: content,
@@ -167,22 +169,25 @@ function handleTaskFormSubmit(event) {
 // ? This function is called when a card is dropped into a lane. It updates the status of the project and saves it to localStorage. You can see this function is called in the `droppable` method below.
 function handleDrop(event, ui) {
   // ? Read projects from localStorage
-  const tasks = readTasksFromStorage(); // line 20
+//   event.preventDefault();
+  const tasks = readTasksFromStorage();
 
   // ? Get the task id from the event
   const taskId = ui.draggable[0].dataset.taskId;
 
   // ? Get the id of the lane that the card was dropped into
   const newStatus = event.target.id;
+  console.log(newStatus)
 
   for (let task of tasks) {
+    console.log(task.id + "|" + taskId)
     // ? Find the project card by the `id` and update the project status.
     if (task.id === taskId) {
       task.status = newStatus;
     }
   }
   // ? Save the updated projects array to localStorage (overwritting the previous one) and render the new project data to the screen.
-  localStorage.setItem('existingTasks', JSON.stringify(existingTasks));
+  localStorage.setItem('existingTasks', JSON.stringify(tasks));
   printTaskData();
 }
 
@@ -191,7 +196,7 @@ taskFormEl.on('submit', handleTaskFormSubmit);
 
 // ? Because the cards are dynamically added to the screen, we have to use jQuery event delegation to listen for clicks on the added cards delete button.
 // ? We listen for a click on the parent element, and THEN check if the target of the click is the delete button. If it is, we call the `handleDeleteProject` function
-// projectDisplayEl.on('click', '.btn-delete-project', handleDeleteTask);
+$(".btn-delete-project").on('click', '.btn-delete-project', handleDeleteTask);
 
 
 // ? When the document is ready, print the project data to the screen and make the lanes droppable. Also, initialize the date picker.
