@@ -7,19 +7,60 @@ const contentInput = document.getElementById("taskDetails");
 const toDoContainer = document.getElementById("todo-cards");
 const inProgressContainer = document.getElementById("in-progress-cards");
 const doneContainer = document.getElementById("done-cards");
-let existingTasks = JSON.parse( localStorage.getItem('existingTasks')) || [];
 const addBtn = document.getElementById("tskBtn");
 const toDoSwim = document.getElementById("to-do");
 const inProgressSwim = document.getElementById("in-progress");
 const doneSwim = document.getElementById("done");
 const cardEl = $('.card');
 
+let existingTasks = JSON.parse( localStorage.getItem('existingTasks')) || [];
 start();
-// generateTaskId();
+
 
 function start(){
+
     if ( existingTasks ) {
-        renderTaskList();
+        toDoContainer.innerHTML = ""
+        inProgressContainer.innerHTML = ""
+        doneContainer.innerHTML = ""
+        existingTasks.forEach (function(existingTasks){
+
+            let cardBlock = document.createElement("div");
+            let h2Tag = document.createElement("h2");
+            let dueDate = document.createElement("p");
+            let contentTag = document.createElement("p");
+            let deleteBtn = document.createElement("button");
+        
+            cardBlock.classList.add = ('card draggable future ui-draggable-handle ui-draggable ');
+            
+            
+            h2Tag.classList.add =('card-header');
+            h2Tag.textContent = taskTitle.value;
+        
+            dueDate.classList.add = ('card-date')
+            dueDate.textContent = dueDate;
+            
+            contentTag.classList.add = ('card-content');
+            contentTag.textContent = taskContent;
+        
+            deleteBtn.classList.add = ('btn btn-danger btn-small delete-item-btn');
+            deleteBtn.setAttribute = ('taskId', uniqueID);
+            deleteBtn.textContent = "Remove";
+        
+            cardBlock.appendChild(h2Tag);
+            cardBlock.appendChild(dueDate);
+            cardBlock.appendChild(contentTag);
+            cardBlock.appendChild(deleteBtn);
+        
+            if( taskObj.status === 'notYetStarted' ){
+                toDoContainer.appendChild(cardBlock)
+            } else if (taskObj.status === 'in-progress'){
+                inProgressContainer.appendChild(cardBlock)
+            } else {
+                doneContainer.appendChild(cardBlock)
+            }
+
+        })
     }
 }
  
@@ -28,10 +69,6 @@ addBtn.addEventListener("click", function(e) {
     generateTaskId();
     parseForm();
 });
-
-
-
-
 
 
 // Todo: create a function to generate a unique task id
@@ -44,17 +81,7 @@ function generateTaskId() {
     return randId;
 }
 
-// $(function() {
-//     $('#tskBtn').on('click', function(e) {
-//         e.preventDefault();
-//         parseForm(e);
-//     });
-// });
 
-/*// Todo: create a function to handle adding a new task
-function handleAddTask(event){
-
-}*/
 function parseForm(){
     let taskId = generateTaskId();
     const existingTasksString = localStorage.getItem('existingTasks');
@@ -128,18 +155,18 @@ function renderTaskList() {
         createTaskCard(taskObj)
     })
 
-    $('.draggable').draggable({
-        opacity: 0.7,
-        zIndex: 100,
-        // ? This is the function that creates the clone of the card that is dragged. This is purely visual and does not affect the data.
-        helper: function (e) {
-          // ? Return the clone with the width set to the width of the original card. This is so the clone does not take up the entire width of the lane. This is to also fix a visual bug where the card shrinks as it's dragged to the right.
-          return original.clone().css({
-            width: original.outerWidth(),
-          });
-        },
-      });
-    }
+    // $('.draggable').draggable({
+    //     opacity: 0.7,
+    //     zIndex: 100,
+    //     // ? This is the function that creates the clone of the card that is dragged. This is purely visual and does not affect the data.
+    //     helper: function (e) {
+    //       // ? Return the clone with the width set to the width of the original card. This is so the clone does not take up the entire width of the lane. This is to also fix a visual bug where the card shrinks as it's dragged to the right.
+    //       return original.clone().css({
+    //         width: original.outerWidth(),
+    //       });
+    //     },
+    //   });
+}
 
 
 

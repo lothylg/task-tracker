@@ -15,5 +15,13 @@ body {
   cursor: grab;
 }
 
+body div.swim-lanes div.card-body div.after {
+  background-color: red;
+}
+
+task-card .here {
+  background-color: yellow;
+}
+
 
 /*will need a class for changing the color of the date portion based on dates due. 
